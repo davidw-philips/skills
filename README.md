@@ -20,34 +20,38 @@ Each skill pairs an LLM with a dedicated, lightweight CLI tool built exclusively
 
 You can install skills directly without cloning the repository by executing the installer scripts from GitHub:
 
-### Bash / Zsh (Linux & macOS)
-
-Raw Script URL: `https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh`
-
-```bash
-# Install all skills into current workspace (cwd):
-curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- cwd all
-
-# Install all skills globally (~/.copilot/skills, ~/.claude/skills, etc.):
-curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- global all
-
-# Install specific skills locally (e.g. Copilot and Claude only):
-curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- cwd copilot claude
-```
-
 ### PowerShell (Windows & Cross-Platform)
 
 Raw Script URL: `https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1`
 
 ```powershell
-# Install all skills into current workspace (cwd):
-& { [scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1)) } cwd all
-
 # Install all skills globally into user profile:
-& { [scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1)) } global all
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) global all
 
-# Install specific skills locally:
-& { [scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1)) } cwd copilot claude
+# Install all skills into current workspace (cwd):
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) cwd all
+
+# Install specific skills locally (e.g. Copilot and Claude only):
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) cwd copilot claude
+```
+
+> **Note on PowerShell Syntax**: Use `& ([scriptblock]::Create(...)) <args>` (parentheses around `[scriptblock]::Create(...)`), not `& { [scriptblock]::Create(...) } <args>`. The outer curly braces create a parameterless closure block that evaluates the expression and discards trailing arguments rather than invoking the created scriptblock.
+
+---
+
+### Bash / Zsh (Linux & macOS)
+
+Raw Script URL: `https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh`
+
+```bash
+# Install all skills globally (~/.copilot/skills, ~/.claude/skills, etc.):
+curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- global all
+
+# Install all skills into current workspace (cwd):
+curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- cwd all
+
+# Install specific skills locally (e.g. Copilot and Claude only):
+curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- cwd copilot claude
 ```
 
 ---
@@ -121,7 +125,7 @@ If you have cloned the repository locally:
 | Argument | Value | Description |
 |---|---|---|
 | **Scope** | `cwd` | Installs into the current directory (`./.<target>/skills/`) |
-| | `global` | Installs into user home directory (`~/.<target>/skills/`) |
+| | `global` | Installs into user profile directory (`~/.<target>/skills/` or Windows user profile) |
 | **Targets** | `copilot` | GitHub Copilot (`.github/skills` or `~/.copilot/skills`) |
 | | `claude` | Claude Code (`.claude/skills` or `~/.claude/skills`) |
 | | `codex` | OpenAI Codex (`.codex/skills` or `~/.codex/skills`) |
