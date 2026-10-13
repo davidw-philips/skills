@@ -8,7 +8,7 @@ Each skill pairs an LLM with a dedicated, lightweight CLI tool built exclusively
 
 ## Included Skills & Repositories
 
-| Skill | Repository | Description | Authentication |
+| Skill | Upstream Repository | Description | Authentication |
 |---|---|---|---|
 | **awskb** | [davidw-philips/awskb](https://github.com/davidw-philips/awskb) | Official AWS Knowledge MCP CLI & Agent Skill. Searches AWS documentation, Code Samples, Regional Availability, and Pricing. | Public (No key required) |
 | **cexa** | [davidw-philips/cexa](https://github.com/davidw-philips/cexa) | Exa Neural Search CLI & Agent Skill. Direct interface to Exa MCP for semantic search, web scraping, and domain filtering. | `EXA_API_KEY` |
@@ -16,43 +16,75 @@ Each skill pairs an LLM with a dedicated, lightweight CLI tool built exclusively
 
 ---
 
+## Fast Install (One-Liners)
+
+You can install skills directly without cloning the repository by executing the installer scripts from GitHub:
+
+### Bash / Zsh (Linux & macOS)
+
+Raw Script URL: `https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh`
+
+```bash
+# Install all skills into current workspace (cwd):
+curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- cwd all
+
+# Install all skills globally (~/.copilot/skills, ~/.claude/skills, etc.):
+curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- global all
+
+# Install specific skills locally (e.g. Copilot and Claude only):
+curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- cwd copilot claude
+```
+
+### PowerShell (Windows & Cross-Platform)
+
+Raw Script URL: `https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1`
+
+```powershell
+# Install all skills into current workspace (cwd):
+& { [scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1)) } cwd all
+
+# Install all skills globally into user profile:
+& { [scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1)) } global all
+
+# Install specific skills locally:
+& { [scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1)) } cwd copilot claude
+```
+
+---
+
 ## Directory Structure
 
 ```text
 skills/
-├── .github/skills/        # GitHub Copilot skills
+├── .github/skills/        # GitHub Copilot skills (.github/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
 │   └── firebridge/
-├── .claude/skills/        # Claude Code skills
+├── .claude/skills/        # Claude Code skills (.claude/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
 │   └── firebridge/
-├── .codex/skills/         # OpenAI Codex skills
+├── .codex/skills/         # OpenAI Codex skills (.codex/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
 │   └── firebridge/
-├── .agents/skills/        # Universal Agent skills
+├── .agents/skills/        # Universal Agent skills (.agents/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
 │   └── firebridge/
-├── install-skills.sh      # Bash installer (Linux / macOS)
-├── install-skills.ps1     # PowerShell installer (Windows)
+├── install-skills.sh      # Bash installer script
+├── install-skills.ps1     # PowerShell installer script
 └── README.md
 ```
 
 ---
 
-## Installation
+## CLI Tools Installation (Prerequisite)
 
-You can install skills either **locally** to the current working directory (`cwd`) or **globally** to your user profile directory (`global`).
-
-### Prerequisites
-
-Install the underlying zero-dependency Python CLI utilities:
+Install the underlying Python CLI tools:
 
 ```bash
-# Using uv (recommended)
+# With uv (recommended)
 uv tool install git+https://github.com/davidw-philips/awskb.git
 uv tool install git+https://github.com/davidw-philips/cexa.git
 uv tool install git+https://github.com/davidw-philips/firebridge.git
@@ -63,7 +95,7 @@ pipx install git+https://github.com/davidw-philips/cexa.git
 pipx install git+https://github.com/davidw-philips/firebridge.git
 ```
 
-Set the relevant API keys in your environment:
+Set relevant environment variables:
 
 ```bash
 export EXA_API_KEY="your-exa-key"
@@ -72,67 +104,26 @@ export FIRECRAWL_API_KEY="your-firecrawl-key"
 
 ---
 
-### Bash (`install-skills.sh`)
+## Local Usage (Cloned Repo)
 
-Syntax:
+If you have cloned the repository locally:
+
 ```bash
+# Bash
 ./install-skills.sh <cwd|global> <target...>
-```
 
-Supported targets: `copilot`, `claude`, `codex`, `agents`, or `all`.
-
-#### Local Installation (Current Repository / Workspace)
-```bash
-# Install all skills into .github/, .claude/, .codex/, and .agents/ of current workspace:
-./install-skills.sh cwd all
-
-# Or install only specific agent targets:
-./install-skills.sh cwd copilot claude
-```
-
-#### Global Installation (User Profile)
-```bash
-# Install all skills globally (~/.copilot/skills, ~/.claude/skills, ~/.codex/skills, ~/.agents/skills):
-./install-skills.sh global all
-
-# Install globally for GitHub Copilot only:
-./install-skills.sh global copilot
-```
-
----
-
-### PowerShell (`install-skills.ps1`)
-
-Syntax:
-```powershell
+# PowerShell
 .\install-skills.ps1 <cwd|global> <target...>
 ```
 
-#### Local Installation (Current Repository / Workspace)
-```powershell
-# Install all skills into current workspace:
-.\install-skills.ps1 cwd all
+### Scope & Target Reference
 
-# Install specific agent skills:
-.\install-skills.ps1 cwd copilot claude
-```
-
-#### Global Installation (User Profile)
-```powershell
-# Install all skills globally into user profile:
-.\install-skills.ps1 global all
-
-# Install globally for Copilot and Codex:
-.\install-skills.ps1 global copilot codex
-```
-
----
-
-## Target Paths Reference
-
-| Agent Target | Local Scope (`cwd`) | Global Scope (`global`) |
+| Argument | Value | Description |
 |---|---|---|
-| `copilot` | `<cwd>/.github/skills/` | `~/.copilot/skills/` |
-| `claude` | `<cwd>/.claude/skills/` | `~/.claude/skills/` |
-| `codex` | `<cwd>/.codex/skills/` | `~/.codex/skills/` |
-| `agents` | `<cwd>/.agents/skills/` | `~/.agents/skills/` |
+| **Scope** | `cwd` | Installs into the current directory (`./.<target>/skills/`) |
+| | `global` | Installs into user home directory (`~/.<target>/skills/`) |
+| **Targets** | `copilot` | GitHub Copilot (`.github/skills` or `~/.copilot/skills`) |
+| | `claude` | Claude Code (`.claude/skills` or `~/.claude/skills`) |
+| | `codex` | OpenAI Codex (`.codex/skills` or `~/.codex/skills`) |
+| | `agents` | Universal Agents (`.agents/skills` or `~/.agents/skills`) |
+| | `all` | Installs all four agent target directories |

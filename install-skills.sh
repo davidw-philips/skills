@@ -1,17 +1,27 @@
 #!/usr/bin/env bash
 # install-skills.sh - Install agent skills locally (cwd) or globally (~/...)
-# Usage: ./install-skills.sh <cwd|global> <target...>
-# Targets: codex, claude, copilot, agents, all
+# Supports running locally from repo OR remotely via curl piped to bash:
+#   curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- <cwd|global> <target...>
 
-set -euo pipefail
+set -eo pipefail
 
-# Determine script root directory (where skill bundles reside)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR=""
+if [ -n "${BASH_SOURCE[0]:-}" ]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
+fi
+
+TEMP_CLONE=""
+cleanup() {
+  if [ -n "$TEMP_CLONE" ] && [ -d "$TEMP_CLONE" ]; then
+    rm -rf "$TEMP_CLONE"
+  fi
+}
+trap cleanup EXIT
 
 if [ $# -lt 2 ]; then
-  cat << 'EOF'
+  cat << 'HELP'
 Usage:
-  ./install-skills.sh <cwd|global> <target...>
+  install-skills.sh <cwd|global> <target...>
 
 Scope:
   cwd       Install into current working directory (e.g. ./<target>/skills/...)
@@ -24,21 +34,29 @@ Targets:
   agents    Universal Agent skills (.agents/skills in cwd, ~/.agents/skills in global)
   all       Install all of the above
 
-Examples:
-  ./install-skills.sh cwd all
-  ./install-skills.sh global copilot claude
-  ./install-skills.sh cwd codex claude
-EOF
+One-Liner Remote Execution:
+  curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- cwd all
+  curl -fsSL https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.sh | bash -s -- global copilot claude
+HELP
   exit 1
 fi
 
 SCOPE="$1"
 shift
 
+# If running directly via curl piped to bash or outside repo, download archive
+if [ -z "$SCRIPT_DIR" ] || [ ! -d "$SCRIPT_DIR/.github/skills" ]; then
+  echo "Downloading skills archive from GitHub..."
+  TEMP_CLONE="$(mktemp -d)"
+  curl -fsSL https://github.com/davidw-philips/skills/archive/refs/heads/main.tar.gz | tar -xz -C "$TEMP_CLONE" --strip-components=1
+  SOURCE_BASE="$TEMP_CLONE"
+else
+  SOURCE_BASE="$SCRIPT_DIR"
+fi
+
 # Collect targets
 TARGETS=("$@")
 
-# Normalize targets
 declare -A TARGET_MAP
 for t in "${TARGETS[@]}"; do
   tl="$(echo "$t" | tr '[:upper:]' '[:lower:]')"
@@ -72,7 +90,7 @@ install_target() {
 for target in "${!TARGET_MAP[@]}"; do
   case "$target" in
     copilot)
-      src="$SCRIPT_DIR/.github/skills"
+      src="$SOURCE_BASE/.github/skills"
       if [ "$SCOPE" = "global" ]; then
         dest="$HOME/.copilot/skills"
       elif [ "$SCOPE" = "cwd" ]; then
@@ -84,7 +102,7 @@ for target in "${!TARGET_MAP[@]}"; do
       install_target "GitHub Copilot" "$src" "$dest"
       ;;
     claude)
-      src="$SCRIPT_DIR/.claude/skills"
+      src="$SOURCE_BASE/.claude/skills"
       if [ "$SCOPE" = "global" ]; then
         dest="$HOME/.claude/skills"
       elif [ "$SCOPE" = "cwd" ]; then
@@ -96,7 +114,7 @@ for target in "${!TARGET_MAP[@]}"; do
       install_target "Claude Code" "$src" "$dest"
       ;;
     codex)
-      src="$SCRIPT_DIR/.codex/skills"
+      src="$SOURCE_BASE/.codex/skills"
       if [ "$SCOPE" = "global" ]; then
         dest="$HOME/.codex/skills"
       elif [ "$SCOPE" = "cwd" ]; then
@@ -108,7 +126,7 @@ for target in "${!TARGET_MAP[@]}"; do
       install_target "OpenAI Codex" "$src" "$dest"
       ;;
     agents)
-      src="$SCRIPT_DIR/.agents/skills"
+      src="$SOURCE_BASE/.agents/skills"
       if [ "$SCOPE" = "global" ]; then
         dest="$HOME/.agents/skills"
       elif [ "$SCOPE" = "cwd" ]; then
