@@ -5,8 +5,8 @@
 .DESCRIPTION
     Copies skill bundles for GitHub Copilot, Claude Code, OpenAI Codex, or universal agents
     to either the current working directory or the user's profile directory.
-    Supports local repo execution OR remote execution via Invoke-RestMethod / irm:
-      & ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) global all
+        Supports local repo execution OR remote execution via Invoke-RestMethod / irm:
+            irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1 | iex
 
 .PARAMETER Scope
     'cwd' or 'global'.
@@ -19,17 +19,17 @@
 .EXAMPLE
     .\install-skills.ps1 cwd all
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) global all
+    irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1 | iex
 #>
 
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory = $true, Position = 0)]
+    [Parameter(Position = 0)]
     [ValidateSet('cwd', 'global', IgnoreCase = $true)]
-    [string]$Scope,
+    [string]$Scope = 'global',
 
-    [Parameter(Mandatory = $true, Position = 1, ValueFromRemainingArguments = $true)]
-    [string[]]$Targets
+    [Parameter(Position = 1, ValueFromRemainingArguments = $true)]
+    [string[]]$Targets = @('all')
 )
 
 $ErrorActionPreference = 'Stop'

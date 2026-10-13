@@ -25,17 +25,18 @@ You can install skills directly without cloning the repository by executing the 
 Raw Script URL: `https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1`
 
 ```powershell
-# Install all skills globally into user profile:
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) global all
+# Install all skills globally into your user profile:
+irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1 | iex
 
-# Install all skills into current workspace (cwd):
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) cwd all
+# To pass a different scope or target, download then invoke the scriptblock:
+$installer = irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1
+& ([scriptblock]::Create($installer)) -Scope cwd -Targets copilot, claude
 
-# Install specific skills locally (e.g. Copilot and Claude only):
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/davidw-philips/skills/main/install-skills.ps1))) cwd copilot claude
+# Example: install Codex skills globally:
+& ([scriptblock]::Create($installer)) -Scope global -Targets codex
 ```
 
-> **Note on PowerShell Syntax**: Use `& ([scriptblock]::Create(...)) <args>` (parentheses around `[scriptblock]::Create(...)`), not `& { [scriptblock]::Create(...) } <args>`. The outer curly braces create a parameterless closure block that evaluates the expression and discards trailing arguments rather than invoking the created scriptblock.
+The direct command uses the installer defaults: `global all`.
 
 ---
 
