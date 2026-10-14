@@ -13,6 +13,7 @@ Each skill pairs an LLM with a dedicated, lightweight CLI tool built exclusively
 | **awskb** | [davidw-philips/awskb](https://github.com/davidw-philips/awskb) | Official AWS Knowledge MCP CLI & Agent Skill. Searches AWS documentation, Code Samples, Regional Availability, and Pricing. | Public (No key required) |
 | **cexa** | [davidw-philips/cexa](https://github.com/davidw-philips/cexa) | Exa Neural Search CLI & Agent Skill. Direct interface to Exa MCP for semantic search, web scraping, and domain filtering. | `EXA_API_KEY` |
 | **firebridge** | [davidw-philips/firebridge](https://github.com/davidw-philips/firebridge) | Firecrawl MCP CLI & Agent Skill. Scrape dynamic pages to clean markdown, web search, crawl domains, and map sitemaps. | `FIRECRAWL_API_KEY` |
+| **ctxseven** | [davidw-philips/ctxseven](https://github.com/davidw-philips/ctxseven) | Context7 documentation CLI & Agent Skill. Resolves library IDs and retrieves current, version-specific documentation and examples. | `CONTEXT7_API_KEY` |
 
 ---
 
@@ -64,19 +65,23 @@ skills/
 ├── .github/skills/        # GitHub Copilot skills (.github/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
-│   └── firebridge/
+│   ├── firebridge/
+│   └── ctxseven/
 ├── .claude/skills/        # Claude Code skills (.claude/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
-│   └── firebridge/
+│   ├── firebridge/
+│   └── ctxseven/
 ├── .codex/skills/         # OpenAI Codex skills (.codex/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
-│   └── firebridge/
+│   ├── firebridge/
+│   └── ctxseven/
 ├── .agents/skills/        # Universal Agent skills (.agents/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
-│   └── firebridge/
+│   ├── firebridge/
+│   └── ctxseven/
 ├── install-skills.sh      # Bash installer script
 ├── install-skills.ps1     # PowerShell installer script
 └── README.md
@@ -93,11 +98,13 @@ Install the underlying Python CLI tools:
 uv tool install git+https://github.com/davidw-philips/awskb.git
 uv tool install git+https://github.com/davidw-philips/cexa.git
 uv tool install git+https://github.com/davidw-philips/firebridge.git
+uv tool install git+https://github.com/davidw-philips/ctxseven.git
 
 # Or with pipx
 pipx install git+https://github.com/davidw-philips/awskb.git
 pipx install git+https://github.com/davidw-philips/cexa.git
 pipx install git+https://github.com/davidw-philips/firebridge.git
+pipx install git+https://github.com/davidw-philips/ctxseven.git
 ```
 
 Set relevant environment variables:
@@ -105,6 +112,7 @@ Set relevant environment variables:
 ```bash
 export EXA_API_KEY="your-exa-key"
 export FIRECRAWL_API_KEY="your-firecrawl-key"
+export CONTEXT7_API_KEY="your-context7-key"
 ```
 
 ---
