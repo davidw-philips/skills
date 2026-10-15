@@ -17,7 +17,15 @@ Use `ctxseven` before implementing code against an external public dependency wh
 
 Do not use it for the active local repository: read and search the local files instead.
 
-## Pre-flight Check
+## Installation & Pre-flight Check
+
+**Windows PowerShell (Recommended):**
+```powershell
+.\install.ps1
+```
+This script automatically configures UTF-8 console support and installs ctxseven.
+
+**Manual setup:**
 
 ```bash
 echo "${CONTEXT7_API_KEY:?CONTEXT7_API_KEY is not set. Run: export CONTEXT7_API_KEY='your-key'}"

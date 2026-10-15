@@ -9,7 +9,15 @@ description: Access AWS documentation, SDKs, service availability, regions, and 
 
 Rather than dumping full MCP tool schemas into agent context up front, query `awskb` dynamically to discover tools and retrieve only the documentation or skills needed.
 
-## Pre-requisite / Installation Check
+## Installation & Pre-requisite Check
+
+**Windows PowerShell (Recommended):**
+```powershell
+.\install.ps1
+```
+This script automatically configures UTF-8 console support and installs awskb.
+
+**Manual setup:**
 
 Before running `awskb` commands, check if the CLI is available in the environment:
 

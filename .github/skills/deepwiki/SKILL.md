@@ -17,8 +17,15 @@ Use `deepwiki` to understand a public GitHub repository's architecture and desig
 
 Do NOT use it for the active local repository being worked on: use local file reading and search instead.
 
-## Pre-flight Check
+## Installation & Pre-flight Check
 
+**Windows PowerShell (Recommended):**
+```powershell
+.\install.ps1
+```
+This script automatically configures UTF-8 console support and installs deepwiki.
+
+**Manual installation:**
 ```bash
 which deepwiki || command -v deepwiki || Get-Command deepwiki
 ```

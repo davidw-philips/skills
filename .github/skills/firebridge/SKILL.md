@@ -9,7 +9,15 @@ description: Scrape, search, crawl, and map web pages using the remote Firecrawl
 
 Rather than configuring local Node.js MCP servers or dumping full tool schemas into agent context up front, query `firebridge` dynamically to discover tools, scrape clean markdown, search the web, crawl documentation, and map websites.
 
-## Pre-requisite / Installation Check
+## Installation & Pre-requisite Check
+
+**Windows PowerShell (Recommended):**
+```powershell
+.\install.ps1
+```
+This script automatically configures UTF-8 console support and installs firebridge.
+
+**Manual setup:**
 
 1. Verify `FIRECRAWL_API_KEY` is set in the environment:
 ```bash

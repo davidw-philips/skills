@@ -9,7 +9,15 @@ description: Execute open-ended web searches and fetch webpage markdown via the 
 
 Rather than configuring local MCP JSON files or dumping full MCP tool schemas into agent context up front, query `cexa` dynamically to discover tools, search the web, and retrieve clean webpage markdown.
 
-## Pre-requisite / Installation Check
+## Installation & Pre-requisite Check
+
+**Windows PowerShell (Recommended):**
+```powershell
+.\install.ps1
+```
+This script automatically configures UTF-8 console support and installs cexa.
+
+**Manual setup:**
 
 1. Verify `EXA_API_KEY` is set in the environment:
 ```bash

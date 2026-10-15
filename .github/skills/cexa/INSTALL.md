@@ -21,22 +21,22 @@ $env:EXA_API_KEY="your-exa-api-key"
 
 ---
 
-## 2. Quick Verification
+## 2. Quick Install (Windows PowerShell)
 
-Before installing, check if `cexa` is already present in your PATH:
-
-```bash
-which cexa || command -v cexa || Get-Command cexa
+```powershell
+.\install.ps1
 ```
 
-Or test invocation directly:
-```bash
-cexa --help
-```
+This script:
+- Configures `PYTHONIOENCODING=utf-8` at the user level (persistent across sessions)
+- Sets it for the current session (works immediately)
+- Installs cexa via `uv tool`
+- Verifies the installation
+- Checks for the `EXA_API_KEY` environment variable
 
 ---
 
-## 3. Installation Options
+## 3. Manual Installation Options
 
 ### Option A: Install via `uv` (Recommended)
 If `uv` is installed, install `cexa` as a globally isolated tool:

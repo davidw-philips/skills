@@ -6,22 +6,21 @@ It has **zero third-party dependencies** (uses only standard library Python 3) a
 
 ---
 
-## 1. Quick Verification
+## 1. Quick Install (Windows PowerShell)
 
-Before installing, check if `awskb` is already present in your PATH:
-
-```bash
-which awskb || command -v awskb || Get-Command awskb
+```powershell
+.\install.ps1
 ```
 
-Or test invocation directly:
-```bash
-awskb --help
-```
+This script:
+- Configures `PYTHONIOENCODING=utf-8` at the user level (persistent across sessions)
+- Sets it for the current session (works immediately)
+- Installs awskb via `uv tool`
+- Verifies the installation
 
 ---
 
-## 2. Installation Options
+## 2. Manual Installation Options
 
 ### Option A: Install via `uv` (Recommended)
 If `uv` is installed, install `awskb` as a globally isolated tool:

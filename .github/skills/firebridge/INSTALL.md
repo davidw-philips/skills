@@ -21,22 +21,22 @@ $env:FIRECRAWL_API_KEY="your-firecrawl-api-key"
 
 ---
 
-## 2. Quick Verification
+## 2. Quick Install (Windows PowerShell)
 
-Before installing, check if `firebridge` is already present in your PATH:
-
-```bash
-which firebridge || command -v firebridge || Get-Command firebridge
+```powershell
+.\install.ps1
 ```
 
-Or test invocation directly:
-```bash
-firebridge --help
-```
+This script:
+- Configures `PYTHONIOENCODING=utf-8` at the user level (persistent across sessions)
+- Sets it for the current session (works immediately)
+- Installs firebridge via `uv tool`
+- Verifies the installation
+- Checks for the `FIRECRAWL_API_KEY` environment variable
 
 ---
 
-## 3. Installation Options
+## 3. Manual Installation Options
 
 ### Option A: Install via `uv` (Recommended)
 If `uv` is installed, install `firebridge` as a globally isolated tool:
