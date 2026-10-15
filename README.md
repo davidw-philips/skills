@@ -15,6 +15,7 @@ Each skill pairs an LLM with a dedicated, lightweight CLI tool built exclusively
 | **firebridge** | [davidw-philips/firebridge](https://github.com/davidw-philips/firebridge) | Firecrawl MCP CLI & Agent Skill. Scrape dynamic pages to clean markdown, web search, crawl domains, and map sitemaps. | `FIRECRAWL_API_KEY` |
 | **ctxseven** | [davidw-philips/ctxseven](https://github.com/davidw-philips/ctxseven) | Context7 documentation CLI & Agent Skill. Resolves library IDs and retrieves current, version-specific documentation and examples. | `CONTEXT7_API_KEY` |
 | **deepwiki** | [davidw-philips/deepwiki](https://github.com/davidw-philips/deepwiki) | DeepWiki repository documentation CLI & Agent Skill. Query public GitHub repository architecture, design, and code organization through indexed documentation. | Public (No key required) |
+| **crg** | [davidw-philips/crg](https://github.com/davidw-philips/crg) | Code Review Graph CLI & Agent Skill. Token-efficient codebase indexing and review analysis using persistent graph database. | Public (No key required) |
 
 ---
 
@@ -68,25 +69,29 @@ skills/
 │   ├── cexa/
 │   ├── firebridge/
 │   ├── ctxseven/
-│   └── deepwiki/
+│   ├── deepwiki/
+│   └── crg/
 ├── .claude/skills/        # Claude Code skills (.claude/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
 │   ├── firebridge/
 │   ├── ctxseven/
-│   └── deepwiki/
+│   ├── deepwiki/
+│   └── crg/
 ├── .codex/skills/         # OpenAI Codex skills (.codex/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
 │   ├── firebridge/
 │   ├── ctxseven/
-│   └── deepwiki/
+│   ├── deepwiki/
+│   └── crg/
 ├── .agents/skills/        # Universal Agent skills (.agents/skills/<skill>/)
 │   ├── awskb/
 │   ├── cexa/
 │   ├── firebridge/
 │   ├── ctxseven/
-│   └── deepwiki/
+│   ├── deepwiki/
+│   └── crg/
 ├── install-skills.sh      # Bash installer script
 ├── install-skills.ps1     # PowerShell installer script
 └── README.md
@@ -105,6 +110,7 @@ uv tool install git+https://github.com/davidw-philips/cexa.git
 uv tool install git+https://github.com/davidw-philips/firebridge.git
 uv tool install git+https://github.com/davidw-philips/ctxseven.git
 uv tool install git+https://github.com/davidw-philips/deepwiki.git
+uv tool install git+https://github.com/davidw-philips/crg.git
 
 # Or with pipx
 pipx install git+https://github.com/davidw-philips/awskb.git
@@ -112,14 +118,38 @@ pipx install git+https://github.com/davidw-philips/cexa.git
 pipx install git+https://github.com/davidw-philips/firebridge.git
 pipx install git+https://github.com/davidw-philips/ctxseven.git
 pipx install git+https://github.com/davidw-philips/deepwiki.git
+pipx install git+https://github.com/davidw-philips/crg.git
 ```
 
-Set relevant environment variables (deepwiki does not require an API key):
+## Environment Variables
+
+### API Keys
 
 ```bash
 export EXA_API_KEY="your-exa-key"
 export FIRECRAWL_API_KEY="your-firecrawl-key"
 export CONTEXT7_API_KEY="your-context7-key"
+```
+
+### Custom TLS/SSL Configuration
+
+All tools using remote MCP endpoints (`awskb`, `cexa`, `firebridge`, `ctxseven`) support custom TLS certificate bundles via environment variables. This is useful when operating behind corporate proxies or with custom CA certificates.
+
+```bash
+# Set one or both for custom TLS verification
+export SSL_CERT_FILE="/path/to/ca-bundle.crt"    # Path to a CA certificate bundle
+export SSL_CERT_DIR="/etc/ssl/certs"             # Path to directory with CA certificates
+```
+
+Each tool will automatically use these variables if set. If TLS verification fails and these are not configured, the error message will suggest setting them.
+
+**Tools with TLS support:**
+- `awskb` — Supports `SSL_CERT_FILE`, `SSL_CERT_DIR`
+- `cexa` — Supports `SSL_CERT_FILE`, `SSL_CERT_DIR`
+- `firebridge` — Supports `SSL_CERT_FILE`, `SSL_CERT_DIR`
+- `ctxseven` — Supports `SSL_CERT_FILE`, `SSL_CERT_DIR`
+- `deepwiki` — Public endpoint, no TLS configuration needed
+- `crg` — Local tool, no TLS configuration needed
 ```
 
 ---
